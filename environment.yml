@@ -1,0 +1,25 @@
+name: deepcrunch-environment
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - plotly
+dependencies:
+  - python=3.10
+  - black=22.10.0
+  - flake8
+  - make
+  - autopep8
+  - isort
+  - setuptools=65.5.0
+  - pip=22.2.2
+  - numpy
+  - plotly_express
+  - jupyterlab
+  - wandb
+  - pytorch
+  - pytorch-cuda=11.7
+  - pytorch-lightning
+  - black
+  - pip:
+    - ray[air]

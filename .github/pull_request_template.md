@@ -13,12 +13,6 @@ Please reference any related feature requests, issues, or PRs here. For example,
 
 <!-- Resolve --> #xxx
 
-##
-
-<!-- Brief description of WHAT you’re doing and WHY. -->
-
-[closes TICKET-###](https://link-to-your-ticket)
-
 ## Implementation
 
 With @pair
@@ -50,6 +44,7 @@ If you're unsure about what to test, where to add tests, or how to run tests, pl
 Please describe how you confirmed the proposed feature/bug-fix/change works here. For example, if you fixed an MLflow client API, you could attach the code that didn't work prior to the fix but works now, or if you added a new feature on MLflow UI, you could attach a video that demonstrates the feature.
 -->
 
+<!--
 ## Emoji Guide
 
 **For reviewers: Emojis can be added to comments to call out blocking versus non-blocking feedback.**
@@ -69,3 +64,5 @@ E.g: Blocking feedback must be addressed before merging.
 | Blocking | 🔴 ❌ 🚨 | RED |
 | Non-blocking | 🟡 💡 🤔 💭 | Yellow, thinking, etc |
 | Praise | 🟢 💚 😍 👍 🙌 | Green, hearts, positive emojis, etc |
+
+-->

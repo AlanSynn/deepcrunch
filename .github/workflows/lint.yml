@@ -1,0 +1,45 @@
+# This GitHub Action performs code linting and sanity checks on pull request events
+name: 'Perform Sanity Checks and Linting'
+
+# Trigger the workflow on pull request events
+on:
+  pull_request:
+    branches: [ main ]
+
+# Default shell for all run steps
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  sanity_check:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out a copy of your repository under $GITHUB_WORKSPACE
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      # Set up a conda environment using the specified environment file
+      - name: Setup Conda environment from environment.yml
+        uses: mamba-org/provision-with-micromamba@main
+        with:
+          environment-file: dev_environment.yml
+
+      # Run black lint
+      - name: Perform Linting with Black
+        run: make lint/black
+
+      # Run isort lint
+      - name: Perform Sorting Imports Check with isort
+        run: make lint/isort
+
+      # Uncomment the following lines to run the build tests
+      # Commented by: Alan Synn (alan@alansynn.com)
+      # Date: 2023-07-05
+      # # Run Python package build
+      # - name: Build Python package
+      #   run: make build

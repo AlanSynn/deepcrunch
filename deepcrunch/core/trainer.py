@@ -1,0 +1,2 @@
+def TrainerWrapper():
+    raise NotImplementedError

@@ -6,20 +6,27 @@ channels:
   - plotly
 dependencies:
   - python=3.10
-  - black=22.10.0
+  - pip=23.1.2
+
+# linting and formatting
+  - black=23.3.0
   - flake8
-  - make
   - autopep8
   - isort
-  - setuptools=65.5.0
-  - pip=22.2.2
+
+# build tools
+  - make
+  - setuptools=68.0.0
+
+# third party packages - data science
   - numpy
-  - plotly_express
   - jupyterlab
+  - plotly_express
   - wandb
+
+# third party packages - deep learning
   - pytorch
-  - pytorch-cuda=11.7
-  - pytorch-lightning
-  - black
+
   - pip:
+# third party packages - distributed computing
     - ray[air]

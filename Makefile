@@ -14,6 +14,8 @@ CLANG_FORMAT   ?= $(shell command -v clang-format-17 || command -v clang-format)
 PYTESTOPTS     ?=
 
 # PHONY targets
+.PHONY: help
+.PHONY: create-env
 .PHONY: addlicense-install docstyle-install docs-install spelling-install test-install
 .PHONY: lint lint-flake8 lint-black lint-isort code-format code-format-black code-format-autopep8 code-format-isort
 .PHONY: install install-editable uninstall build clean-build clean-py clean reinstall
@@ -48,6 +50,15 @@ BROWSER := python -c "$$BROWSER_PYSCRIPT"
 # help target: display targets and descriptions
 help:
 	@python -c "$$HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+
+################ Environments ################
+
+DEFAULT_ENV_FILE = environment.yml
+
+# create conda environment from environment.yml
+# Note: Micromamba is a faster alternative to conda
+create-env:
+	conda env create -f $(DEFAULT_ENV_FILE) -p ./env
 
 ############ Linter And Formatter ############
 

@@ -77,20 +77,20 @@ lint-isort:
 # lint target: run all linters
 lint: lint-isort lint-flake8 lint-black
 
-# code-format-black target: format code using black
-code-format-black:
+# format-black target: format code using black
+format-black:
 	black deepcrunch
 
-# code-format-autopep8 target: format code using autopep8
-code-format-autopep8:
+# format-autopep8 target: format code using autopep8
+format-autopep8:
 	autopep8 --in-place --aggressive --aggressive --recursive deepcrunch/
 
-# code-format-isort target: format code using isort
-code-format-isort:
+# format-isort target: format code using isort
+format-isort:
 	isort --profile black deepcrunch
 
-# code-format target: run all formatters
-code-format: code-format-isort code-format-autopep8 code-format-black
+# format target: run all formatters
+format: format-isort format-autopep8 format-black
 
 ############ Documentation ############
 

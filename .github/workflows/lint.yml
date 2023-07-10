@@ -27,7 +27,7 @@ jobs:
       - name: Setup Conda environment from environment.yml
         uses: mamba-org/provision-with-micromamba@main
         with:
-          environment-file: dev_environment.yml
+          environment-file: .github/ci_environment.yml
 
       # Run black lint
       - name: Perform Linting with Black

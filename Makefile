@@ -129,7 +129,9 @@ spelling: docs-install
 	make -C docs spelling SPHINXOPTS="-W"
 
 clean-docs:
-	make -C docs clean
+	rm -fr ./docs/build/
+	rm -fr ./docs/html/
+	rm -fr ./docs/doctrees/
 
 ############ Build and Install ############
 
@@ -165,8 +167,8 @@ clean-py:
 	find . -depth -type d -name ".ruff_cache" -exec rm -r "{}" +
 	find . -depth -type d -name ".mypy_cache" -exec rm -r "{}" +
 	find . -depth -type d -name ".pytest_cache" -exec rm -r "{}" +
-	rm tests/.coverage
-	rm tests/coverage.xml
+	find . -depth -type d -name ".coverage" -exec rm -r "{}" +
+	find . -depth -type d -name "coverage.xml" -exec rm -r "{}" +
 
 clean: clean-py clean-build clean-docs
 

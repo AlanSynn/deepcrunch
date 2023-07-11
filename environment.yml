@@ -13,14 +13,20 @@ dependencies:
   - flake8
   - autopep8
   - isort
+  - clang-format
 
 # build tools
   - make
   - setuptools=68.0.0
 
+# miscellenous tools
+  - go # addlicense
+
 # third party packages - data science
   - numpy
+  - hypothesis
   - jupyterlab
+  - ipywidgets
   - plotly_express
   - wandb
 
@@ -30,3 +36,4 @@ dependencies:
   - pip:
 # third party packages - distributed computing
     - ray[air]
+    - pytest-cov

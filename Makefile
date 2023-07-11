@@ -3,7 +3,7 @@ PROJECT_NAME   = deepcrunch
 COPYRIGHT      = "LG U+ MLOps Team. All Rights Reserved."
 PROJECT_PATH   = $(PROJECT_NAME)
 SHELL          = /bin/bash
-SOURCE_FOLDERS = $(PROJECT_PATH) examples include src tests docs
+SOURCE_FOLDERS = $(PROJECT_PATH) examples csrc tests docs
 PYTHON_FILES   = $(shell find $(SOURCE_FOLDERS) -type f -name "*.py" -o -name "*.pyi")
 CXX_FILES      = $(shell find $(SOURCE_FOLDERS) -type f -name "*.h" -o -name "*.cc")
 CUDA_FILES     = $(shell find $(SOURCE_FOLDERS) -type f -name "*.cuh" -o -name "*.cu")
@@ -92,12 +92,30 @@ format-isort:
 # format target: run all formatters
 format: format-isort format-autopep8 format-black
 
-############ Documentation ############
+################## LICENSE ###################
 
-# Documentation
+# Check if go is installed
+check-go:
+	@echo "Checking go installation..."
+	@go version
+
+# Install license header tool
+addlicense-install: check-go
+	go install github.com/google/addlicense@latest
+
+# Check if license header is present in all files
+check-license: check-go
+	@echo "Checking license headers..."
+	@addlicense -check -f LICENSE -y 2023-$(shell date +"%Y") $(SOURCE_FOLDERS)
 
 addlicense: addlicense-install
-	addlicense -c $(COPYRIGHT) -ignore tests/coverage.xml -l apache -y 2022-$(shell date +"%Y") -check $(SOURCE_FOLDERS)
+	@addlicense -ignore tests/coverage.xml -f LICENSE -y 2023-$(shell date +"%Y") $(SOURCE_FOLDERS)
+
+############ Documentation ############
+
+# Install documentation dependencies
+docs-install:
+	pip install sphinx sphinx_autobuild pydocstyle doc8
 
 docstyle: docs-install
 	make -C docs clean
@@ -121,9 +139,6 @@ install:
 
 # install-dev target: install Python package in development mode
 install-editable:
-	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install --upgrade setuptools wheel
-	$(PYTHON) -m pip install torch numpy pybind11
 	USE_FP16=ON TORCH_CUDA_ARCH_LIST=Auto $(PYTHON) -m pip install -vvv --no-build-isolation --editable .
 
 install-e: install-editable  # alias
@@ -161,9 +176,8 @@ reinstall: clean build install
 # Tests
 
 pytest: test-install
-	cd tests && $(PYTHON) -c 'import $(PROJECT_PATH)' && \
-	$(PYTHON) -m pytest --verbose --color=yes --durations=0 \
-		--cov="$(PROJECT_PATH)" --cov-config=.coveragerc --cov-report=xml --cov-report=term-missing \
-		$(PYTESTOPTS) .
+	pytest --verbose --color=yes --durations=0 \
+		--cov-config=.coveragerc --cov-report=xml:tests/coverage.xml --cov-report=term-missing \
+		--cov="$(PROJECT_PATH)" tests/
 
 test: pytest

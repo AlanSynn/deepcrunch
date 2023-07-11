@@ -1,0 +1,31 @@
+# Include C++/Cuda files
+recursive-include csrc *
+
+# Include markdown files
+include *.md
+include CONTRIBUTING.md
+include HISTORY.md
+include LICENSE
+include README.md
+
+# Include text files
+include *.txt
+
+# Include setup files
+include setup.py
+include requirements.txt
+
+# Include configuration files
+include tox.ini
+include .travis.yml
+include .coveragerc
+
+# Include docs and tests
+recursive-include docs *.rst conf.py Makefile make.bat *.jpg *.png *.gif
+recursive-exclude tests *
+
+# Exclude Python bytecode, temporary files, and other unnecessary files
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+global-exclude *.log
+global-exclude .DS_Store

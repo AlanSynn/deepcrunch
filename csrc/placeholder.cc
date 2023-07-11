@@ -1,16 +1,14 @@
-#include <torch/extensions.h>
-
+#include <torch/extension.h>
+#include "deepcrunch.h"
+//==============================================================================
 namespace deepcrunch {
-namespace csrc {
-
+//==============================================================================
 void register_extension() {
     // This function is intentionally left blank.
 }
-
-} // namespace csrc
 } // namespace deepcrunch
-
-
-pybind11::module torch_extension_module(const pybind11::module& m) {
-    pybind11::module m_ext = m.def_submodule("ext", "DeepCrunch extension module");
+//==============================================================================
+PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
+  m.def("register_extension", &deepcrunch::register_extension, "register extension");
 }
+//==============================================================================

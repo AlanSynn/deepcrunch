@@ -12,7 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pathlib import Path
 
-class TrainerWrapper:
-    def __init__(self) -> None:
-        pass
+
+# Check if the given string is path and valid
+def is_valid_path(path: str) -> bool:
+    if Path(path).is_file():
+        return True
+    else:
+        return False

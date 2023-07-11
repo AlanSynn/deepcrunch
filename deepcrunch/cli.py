@@ -1,7 +1,8 @@
 import argparse
 import os
+
 from deepcrunch.core import ModelWrapper, TrainerWrapper
-from deepcrunch.utilities import set_seed
+from deepcrunch.utilities.torch_utils import set_seed
 
 ###############################################
 #
@@ -17,6 +18,7 @@ os.environ["NCCL_P2P_LEVEL"] = "NVL"
 # PARSING ARGUMENTS
 #
 ###############################################
+
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser(description="deepcrunch")
@@ -44,17 +46,20 @@ def parse_args(args=None):
 
     return args
 
+
 def default_config(args=None):
     args.accelerator = "cpu"
     args.world_size = 1
     logger = None
     return logger, args
 
+
 ###############################################
 #
 # MAIN
 #
 ###############################################
+
 
 def main():
     set_seed()
@@ -79,6 +84,7 @@ def main():
     model = ModelWrapper(model)
     trainer = TrainerWrapper(args, logger)
     trainer.fit(model)
+
 
 if __name__ == "__main__":
     main()

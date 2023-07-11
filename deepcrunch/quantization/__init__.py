@@ -12,7 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Description: This file contains the list of quantizers available in DeepCrunch
+from deepcrunch.quantization.base_quantizer import BaseQuantizer
 
-class TrainerWrapper:
-    def __init__(self) -> None:
-        pass
+QUANTIZER = {
+    "base": "BaseQuantizer",
+    "static": "StaticQuantizer",
+    "dynamic": "DynamicQuantizer",
+    "qat": "QATQuantizer",
+}

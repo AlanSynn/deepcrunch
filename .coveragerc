@@ -1,0 +1,15 @@
+[run]
+source = deepcrunch
+omit = deepcrunch/placeholder.py
+relative_files = True
+
+[report]
+omit =
+  tests/data/*
+  */site-packages/*
+  .tox/*
+exclude_lines =
+  pragma: no cover
+  torch.jit.script
+  raise
+  except

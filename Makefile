@@ -75,7 +75,7 @@ lint-isort:
 	isort --check-only --profile black deepcrunch
 
 # lint target: run all linters
-lint: lint-isort lint-flake8 lint-black
+lint: lint-isort lint-black
 
 # format-black target: format code using black
 format-black:

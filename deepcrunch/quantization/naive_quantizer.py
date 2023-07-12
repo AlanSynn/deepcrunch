@@ -26,6 +26,9 @@ class NaiveQuantizer(BaseQuantizer):
     @staticmethod
     def quantize(model, qconfig_spec, dtype, inplace):
         model_quantized = quantize_dynamic(
-            model=model, qconfig_spec={nn.LSTM, nn.Linear}, dtype=torch.qint8, inplace=False
+            model=model,
+            qconfig_spec={nn.LSTM, nn.Linear},
+            dtype=torch.qint8,
+            inplace=False,
         )
         return quantize_dynamic(model, qconfig_spec, dtype, inplace)

@@ -44,15 +44,33 @@ class WandbLogger(BaseLogger):
         self._num_restores = num_restores
 
         proj = f"{proj_name}_{model_name}"
-        run_name = "baseline" if num_restores == 0 else f"{sys_name}_{eval_metric}_{threshold}%_{num_restores}_restores"
+        run_name = (
+            "baseline"
+            if num_restores == 0
+            else f"{sys_name}_{eval_metric}_{threshold}%_{num_restores}_restores"
+        )
 
-        run_id = checkpoint["run_id"] if checkpoint and "run_id" in checkpoint else wandb.util.generate_id()
-        assert not checkpoint or (run_name == checkpoint["run_name"] and proj == checkpoint["project_name"])
+        run_id = (
+            checkpoint["run_id"]
+            if checkpoint and "run_id" in checkpoint
+            else wandb.util.generate_id()
+        )
+        assert not checkpoint or (
+            run_name == checkpoint["run_name"] and proj == checkpoint["project_name"]
+        )
 
-        self.logger = wandb.init(project=proj, name=run_name, id=run_id, resume="allow", config=config)
+        self.logger = wandb.init(
+            project=proj, name=run_name, id=run_id, resume="allow", config=config
+        )
 
     @run_on_rank_zero
-    def log(self, data: Dict[str, Any], step: int, commit: Optional[bool] = None, sync: Optional[bool] = None):
+    def log(
+        self,
+        data: Dict[str, Any],
+        step: int,
+        commit: Optional[bool] = None,
+        sync: Optional[bool] = None,
+    ):
         self.logger.log(data, step, commit, sync)
 
     @run_on_rank_zero

@@ -79,7 +79,9 @@ class ModuleLoader:
             )
 
     @staticmethod
-    def load_class_from_module(module_name: str, class_name: str, prefix: Optional[str] = None) -> object:
+    def load_class_from_module(
+        module_name: str, class_name: str, prefix: Optional[str] = None
+    ) -> object:
         """
         Dynamically loads a class from a module.
 
@@ -102,7 +104,9 @@ class ModuleLoader:
             return None
 
     @staticmethod
-    def execute_function_from_module(module_name: str, function_name: str, prefix: Optional[str] = None) -> object:
+    def execute_function_from_module(
+        module_name: str, function_name: str, prefix: Optional[str] = None
+    ) -> object:
         """
         Dynamically executes a function from a module.
 

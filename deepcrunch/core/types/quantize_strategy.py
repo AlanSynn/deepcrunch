@@ -1,5 +1,6 @@
 from enum import IntEnum
 
+
 class QUANTIZATION_STRATEGY(IntEnum):
     UNIFORM = 0
     DEEPCRUNCH = 1

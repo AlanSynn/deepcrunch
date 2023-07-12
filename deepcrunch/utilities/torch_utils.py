@@ -1,5 +1,5 @@
-import random
 import os
+import random
 import uuid
 from typing import Callable
 
@@ -13,6 +13,7 @@ FILE_SIZE_IDENTIFIER = {
     "GB": 1e9,
     "TB": 1e12,
 }
+
 
 def set_seed() -> None:
     torch.manual_seed(0)
@@ -28,27 +29,38 @@ def run_on_rank_zero(func: Callable) -> Callable:
 
     return wrapper
 
+
 def get_uid() -> str:
     return str(uuid.uuid4())
+
 
 def get_temp_file_name() -> str:
     return f"tmp_{get_uid()}.pt"
 
+
 def get_number_from_size_identifier(size_identifier: str = "MB") -> int:
     size_identifier = size_identifier.upper()
-    assert size_identifier in FILE_SIZE_IDENTIFIER, f"Invalid size identifier {size_identifier}."
+    assert (
+        size_identifier in FILE_SIZE_IDENTIFIER
+    ), f"Invalid size identifier {size_identifier}."
     return FILE_SIZE_IDENTIFIER[size_identifier]
+
 
 def get_model_size(model: nn.Module, size_identifier: str = "MB") -> int:
     size_unit = get_number_from_size_identifier(size_identifier)
     tmp_file_name = get_temp_file_name()
     torch.save(model.state_dict(), tmp_file_name)
-    model_size = os.path.getsize(tmp_file_name)//size_unit
+    model_size = os.path.getsize(tmp_file_name) // size_unit
     os.remove(tmp_file_name)
     return model_size
 
+
 # Calculate the approximated model size by it's parameter and quantized bit size
-def get_approx_model_size_by_bit(model: nn.Module, bit: int = 8, size_identifier: str = "MB") -> int:
+
+
+def get_approx_model_size_by_bit(
+    model: nn.Module, bit: int = 8, size_identifier: str = "MB"
+) -> int:
     size_unit = get_number_from_size_identifier(size_identifier)
     model_size = count_parameters(model) / size_unit * bit / 8
 
@@ -60,7 +72,7 @@ def get_approx_model_size_by_bit(model: nn.Module, bit: int = 8, size_identifier
         buffer_size += buffer.nelement() * buffer.element_size()
 
     size_all_mb = (param_size + buffer_size) / 1024**2
-    print('model size: {:.3f}MB'.format(size_all_mb))
+    print("model size: {:.3f}MB".format(size_all_mb))
 
 
 # Count total model parameters for both trainable and non-trainable

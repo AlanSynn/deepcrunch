@@ -21,7 +21,13 @@ class BaseLogger(ABC):
         self.config = config
 
     @abstractmethod
-    def log(self, data: Dict[str, Any], step: int, commit: Optional[bool] = None, sync: Optional[bool] = None):
+    def log(
+        self,
+        data: Dict[str, Any],
+        step: int,
+        commit: Optional[bool] = None,
+        sync: Optional[bool] = None,
+    ):
         pass
 
     def get_attr(self, attr: str) -> Optional[str]:

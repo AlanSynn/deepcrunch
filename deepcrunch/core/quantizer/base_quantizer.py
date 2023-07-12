@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
-
-import torch
-
 from dataclasses import dataclass
 from enum import IntEnum
+
+import torch
 
 
 @dataclass
@@ -33,12 +32,10 @@ class BaseDataclass:
         return output
 
 
-
 @dataclass
 class BaseQuantizationConfig(BaseDataclass):
     def __str__(self):
         return f"QuantizationConfig({self.__dict__})"
-
 
 
 class BaseQuantizer(ABC):

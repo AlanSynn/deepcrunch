@@ -1,5 +1,6 @@
 from deepcrunch.core.types.quantize_strategy import QUANTIZATION_STRATEGY
 
+
 class QuantizerRegistry:
     """
     Registry for quantizers

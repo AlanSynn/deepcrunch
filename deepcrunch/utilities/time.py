@@ -1,6 +1,6 @@
 import logging
 from time import perf_counter
-from typing import Callable, Any, Optional
+from typing import Any, Callable, Optional
 
 
 def log_elapsed_time(customized_msg: Optional[str] = "") -> Callable:

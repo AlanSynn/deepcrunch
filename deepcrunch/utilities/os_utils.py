@@ -1,5 +1,5 @@
-from pathlib import Path
 import importlib
+from pathlib import Path
 
 
 def is_valid_path(path: str) -> bool:

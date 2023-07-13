@@ -8,7 +8,12 @@ from itertools import product
 import torch
 from setuptools import find_packages, setup
 from torch.__config__ import parallel_info
-from torch.utils.cpp_extension import CUDA_HOME, BuildExtension, CppExtension, CUDAExtension
+from torch.utils.cpp_extension import (
+    CUDA_HOME,
+    BuildExtension,
+    CppExtension,
+    CUDAExtension,
+)
 
 __version__ = "0.1.0"
 URL = "https://github.com/AlanSynn/deepcrunch"
@@ -58,7 +63,11 @@ def get_extensions():
         extra_link_args = [] if WITH_SYMBOLS else ["-s"]
 
         info = parallel_info()
-        if "backend: OpenMP" in info and "OpenMP not found" not in info and sys.platform != "darwin":
+        if (
+            "backend: OpenMP" in info
+            and "OpenMP not found" not in info
+            and sys.platform != "darwin"
+        ):
             extra_compile_args["cxx"] += ["-DAT_PARALLEL_OPENMP"]
             if sys.platform == "win32":
                 extra_compile_args["cxx"] += ["/openmp"]
@@ -132,14 +141,25 @@ setup(
     author_email="alan@alansynn.com",
     url=URL,
     download_url=f"{URL}/archive/{__version__}.tar.gz",
-    keywords=["pytorch", "model compression", "quantization", "pruning", "distillation", "quantization aware training"],
+    keywords=[
+        "pytorch",
+        "model compression",
+        "quantization",
+        "pruning",
+        "distillation",
+        "quantization aware training",
+    ],
     python_requires=">=3.7",
     install_requires=install_requires,
     extras_require={
         "test": test_requires,
     },
     ext_modules=get_extensions() if not BUILD_DOCS else [],
-    cmdclass={"build_ext": BuildExtension.with_options(no_python_abi_suffix=True, use_ninja=False)},
+    cmdclass={
+        "build_ext": BuildExtension.with_options(
+            no_python_abi_suffix=True, use_ninja=False
+        )
+    },
     packages=find_packages(),
     include_package_data=include_package_data,
 )

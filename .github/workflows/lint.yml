@@ -1,5 +1,5 @@
-# This GitHub Action performs code linting and sanity checks on pull request events
-name: 'Perform Sanity Checks and Linting'
+# This GitHub Action performs code linting on pull request events
+name: 'Linting'
 
 # Trigger the workflow on pull request events
 on:
@@ -34,7 +34,7 @@ jobs:
           environment-file: .github/ci_environment.yml
 
       # Run linting
-      - name: Perform Linting with Black
+      - name: Perform Linting
         run: make lint
 
       # Uncomment the following lines to run the build tests

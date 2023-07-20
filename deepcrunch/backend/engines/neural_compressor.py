@@ -1,21 +1,25 @@
-import os
-
 from neural_compressor.experimental import Quantization, common
 
+from deepcrunch.backend.engines.base_backend import (
+    PostTrainingQuantizationBaseWrapper as PTQBase,
+)
+from deepcrunch.utils.time import log_elapsed_time
 
-class PostTrainingQuantizationWrapper:
+
+class NeuralCompressorPTQ(PTQBase):
     """A wrapper for post-training quantization with Intel Neural Compressor."""
 
-    def __init__(self, model, config_path):
+    def __init__(self, model=None, config_path=None):
         """
         Args:
-            model: A trained PyTorch or TensorFlow model.
-            config_path: Path to the YAML configuration file for quantization.
+            model: A trained PyTorch or TensorFlow model. Default is None.
+            config_path: Path to the YAML configuration file for quantization. Default is None.
         """
         self.model = model
         self.config_path = config_path
+        super().__init__()
 
-    @log_elapsed_time
+    @log_elapsed_time(customized_msg="Quantization time: {elapsed_time:.2f} seconds")
     def quantize(self, output_path):
         """Quantize the model and save it to the specified path.
 

@@ -18,11 +18,11 @@
 
 from typing import Any, Dict, Optional
 
-import wandb
-
 from deepcrunch.logger.base_logger import BaseLogger
-from deepcrunch.utilities.torch_utils import run_on_rank_zero
+from deepcrunch.utils.torch_utils import run_on_rank_zero
+from deepcrunch.utils.os_utils import LazyImport
 
+wandb = LazyImport("wandb")
 
 class WandbLogger(BaseLogger):
     @run_on_rank_zero

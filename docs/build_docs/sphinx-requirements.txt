@@ -1,0 +1,6 @@
+sphinx==6.1.1
+pydata_sphinx_theme
+recommonmark
+sphinx-markdown-tables
+sphinx-md
+sphinx-autoapi

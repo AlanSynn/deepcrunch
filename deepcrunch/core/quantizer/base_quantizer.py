@@ -2,8 +2,9 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import IntEnum
 
-import torch
+from deepcrunch.utils.os_utils import LazyImport
 
+torch = LazyImport("torch")
 
 @dataclass
 class BaseDataclass:

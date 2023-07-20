@@ -1,0 +1,19 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: local
+    hooks:
+      # Hook ID
+      - id: makefile-format
+        # Name of the hook
+        name: style-formatter
+        # Description of what the hook does
+        description: >
+          Style formatter with make format command (black, isort, autopep8).
+        # The command that is run
+        entry: make format
+        # The language that the hook is written in
+        language: system
+        # The types that this hook is applied to
+        types: [c++, python]
+        # Option that make fail fast
+        fail_fast: true

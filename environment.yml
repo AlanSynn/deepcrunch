@@ -14,6 +14,7 @@ dependencies:
   - autopep8
   - isort
   - clang-format
+  - pre-commit
 
 # build tools
   - make
@@ -34,6 +35,10 @@ dependencies:
   - pytorch
 
   - pip:
-# third party packages - distributed computing
+    # third party packages - distributed computing
     - ray[air]
     - pytest-cov
+
+    # documentation tools
+    - sphinx
+    - pydata-sphinx-theme

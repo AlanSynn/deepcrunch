@@ -15,7 +15,7 @@
 from torch.quantization import quantize_dynamic
 
 from deepcrunch.quantization.base_quantizer import BaseQuantizer
-from deepcrunch.utilities.exceptions import InvalidQuantizationConfigException
+from deepcrunch.utils.exceptions import InvalidQuantizationConfigException
 
 
 class NaiveQuantizer(BaseQuantizer):

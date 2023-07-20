@@ -2,7 +2,10 @@ import argparse
 import os
 
 from deepcrunch.core import ModelWrapper, TrainerWrapper
-from deepcrunch.utilities.torch_utils import set_seed
+from deepcrunch.utils.torch_utils import set_seed
+from deepcrunch.utils.os_utils import LazyImport
+
+wandb = LazyImport("wandb")
 
 ###############################################
 #

@@ -13,6 +13,7 @@ def log_elapsed_time(customized_msg: Optional[str] = "") -> Callable:
     def decorator(func: Callable) -> Callable:
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             start = perf_counter()
+            # raise ValueError(*args, **kwargs)
             result = func(*args, **kwargs)
             end = perf_counter()
             elapsed_time = round((end - start) * 1000, 2)

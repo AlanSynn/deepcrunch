@@ -1,25 +1,20 @@
-# Copyright 2023 -ignore
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# from deepcrunch.core.model import ModelWrapper
+# from deepcrunch.core.trainer import TrainerWrapper
 
-"""
-DeepCrunch: An automated library for practical and efficient deep learning model compression.
-This project is a part of the LG U+ Global Summer Internship.
+# from .main import config, quantize
 
-Created by Alan Synn (alan@alansynn.com) MLOps team.
-"""
+# __all__ = ["TrainerWrapper", "ModelWrapper"]
 
-from deepcrunch.core.model import ModelWrapper
-from deepcrunch.core.trainer import TrainerWrapper
+from deepcrunch.deepcrunch import config, quantize
+PKGS = ["config", "quantize"]
 
-__all__ = ["TrainerWrapper", "ModelWrapper"]
+from deepcrunch.performance import e2e_latency, size_in_mb
+PKGS += ["e2e_latency", "size_in_mb"]
+
+
+__all__ = [
+    "config",
+    "quantize",
+    "e2e_latency",
+    "size_in_mb",
+]

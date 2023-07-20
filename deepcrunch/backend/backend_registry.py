@@ -1,9 +1,12 @@
 from deepcrunch.backend.types import BACKEND_TYPES
 from deepcrunch.utils.os_utils import LazyImport
 
-# Lazy importing all the dnn compression backends
-neural_compressor = LazyImport("neural_compressor")
-torch = LazyImport("torch")
+# TODO: Lazy import backends
+from deepcrunch.backend.engines.neural_compressor import (
+    NeuralCompressorPTQ as NeuralCompressor,
+)
+from deepcrunch.backend.engines.torch_ao import TorchPTQ as Torch
+
 # qd = LazyImport('qd')
 # deepcrunch = LazyImport('deepcrunch.compressor')
 
@@ -41,7 +44,10 @@ class BackendRegistry:
         :param kwargs: Any additional keyword arguments to pass to the backend constructor.
         :return: An instance of the specified backend.
         """
-        return cls._backends[backend_name](*args, **kwargs)
+
+        backend_type = BACKEND_TYPES.from_str(backend_name)
+
+        return cls._backends[backend_type](*args, **kwargs)
 
     @classmethod
     def get_backend_class(cls, backend_name):
@@ -51,10 +57,13 @@ class BackendRegistry:
         :param backend_name: The name of the backend to retrieve.
         :return: The class of the specified backend.
         """
-        return cls._backends[backend_name]
+
+        backend_type = BACKEND_TYPES.from_str(backend_name)
+
+        return cls._backends[backend_type]
 
 
-BackendRegistry.register(BACKEND_TYPES.NEURAL_COMPRESSOR, neural_compressor)
-BackendRegistry.register(BACKEND_TYPES.TORCH, torch)
+BackendRegistry.register(BACKEND_TYPES.NEURAL_COMPRESSOR, NeuralCompressor)
+BackendRegistry.register(BACKEND_TYPES.TORCH, Torch)
 # BackendRegistry.register(BACKEND_TYPES.QD, qd)
 # BackendRegistry.register(BACKEND_TYPES.DEEPCRUNCH, deepcrunch)

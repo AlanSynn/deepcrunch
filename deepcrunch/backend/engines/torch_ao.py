@@ -263,3 +263,21 @@ class TorchPTQ(PTQBase):
             The path to the YAML configuration file for quantization.
         """
         return self.config_path
+
+    def get_inference_model(self, model, input_dim: tuple=(1, 3, 224, 224)):
+        """Get the inference model.
+
+        Returns:
+            The inference model.
+        """
+
+        # For now, we suggest to disable the Jit Autocast Pass,
+        # As the issue: https://github.com/pytorch/pytorch/issues/75956
+
+        torch._C._jit_set_autocast_mode(False)
+
+        with torch.cpu.amp.autocast(cache_enabled=False):
+            model = torch.jit.trace(model, torch.randn(*input_dim))
+        inf_model = torch.jit.freeze(model)
+
+        return inf_model

@@ -79,7 +79,7 @@ def get_extensions():
         # As of PyTorch 2.0.1, quantization is not supported on macOS arm64.
         # See https://github.com/pytorch/pytorch/tree/main/aten/src/ATen/native/quantized/cpu/qnnpack
         if sys.platform == "darwin" and platform.machine() == "arm64":
-            raise EnvironmentError("Quantization is not supported on macOS arm64.")
+            print("PyTorch does not support quantization on macOS arm64.")
 
         if suffix == "cuda":
             define_macros += [("WITH_CUDA", None)]

@@ -1,9 +1,14 @@
-from neural_compressor.experimental import Quantization, common
-
 from deepcrunch.backend.engines.base_backend import (
     PostTrainingQuantizationBaseWrapper as PTQBase,
 )
 from deepcrunch.utils.time import log_elapsed_time
+
+from deepcrunch.utils.os_utils import LazyImport
+
+neural_compressor = LazyImport("neural_compressor")
+
+Quantization = LazyImport("neural_compressor.experimental.Quantization")
+common = LazyImport("neural_compressor.experimental.common")
 
 
 class NeuralCompressorPTQ(PTQBase):

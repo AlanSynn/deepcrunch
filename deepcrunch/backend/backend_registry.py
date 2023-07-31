@@ -6,7 +6,7 @@ from deepcrunch.backend.engines.neural_compressor import (
     NeuralCompressorPTQ as NeuralCompressor,
 )
 from deepcrunch.backend.engines.torch_ao import TorchPTQ as Torch
-
+from deepcrunch.backend.engines.onnx import ONNXPTQ as onnx
 # qd = LazyImport('qd')
 # deepcrunch = LazyImport('deepcrunch.compressor')
 
@@ -65,5 +65,5 @@ class BackendRegistry:
 
 BackendRegistry.register(BACKEND_TYPES.NEURAL_COMPRESSOR, NeuralCompressor)
 BackendRegistry.register(BACKEND_TYPES.TORCH, Torch)
-# BackendRegistry.register(BACKEND_TYPES.QD, qd)
+BackendRegistry.register(BACKEND_TYPES.ONNX, onnx)
 # BackendRegistry.register(BACKEND_TYPES.DEEPCRUNCH, deepcrunch)

@@ -5,16 +5,15 @@
 
 # __all__ = ["TrainerWrapper", "ModelWrapper"]
 
-from deepcrunch.deepcrunch import config, quantize
-PKGS = ["config", "quantize"]
+from deepcrunch.deepcrunch import config, quantize, save
 
 from deepcrunch.performance import e2e_latency, size_in_mb
-PKGS += ["e2e_latency", "size_in_mb"]
 
 
 __all__ = [
     "config",
     "quantize",
+    "save",
     "e2e_latency",
     "size_in_mb",
 ]

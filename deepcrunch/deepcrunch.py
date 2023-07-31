@@ -1,3 +1,4 @@
+from typing import Optional
 from deepcrunch.backend.backend_registry import BackendRegistry
 
 class _Config:
@@ -20,7 +21,7 @@ class _Config:
             if value not in ["inference", "training"]:
                 raise ValueError(f"Invalid mode: {value}")
         elif name == "backend":
-            if value not in ["torch", "neural_compressor"]:
+            if value not in ["torch", "onnx", "neural_compressor"]:
                 raise ValueError(f"Invalid backend: {value}")
         super().__setattr__(name, value)
 
@@ -34,7 +35,7 @@ class _Config:
         else:
             raise AttributeError(f"Invalid attribute: {name}")
 
-def config(framework: str = "pytorch", mode: str = "inference", backend: str = "torch"):
+def config(framework: Optional[str] = None, backend: Optional[str] = None, mode: Optional[str] = None):
     """
     Configures the framework and mode for the DeepCrunch library.
 
@@ -50,6 +51,33 @@ def config(framework: str = "pytorch", mode: str = "inference", backend: str = "
     None.
 
     """
+
+    # Check model file suffix
+    if isinstance(framework, str):
+        if framework.endswith(".onnx") or framework == "onnx":
+            framework = "onnx"
+        elif framework.endswith(".pt") or framework.endswith(".pth") or framework == "pytorch" or framework == "torch":
+            framework = "pytorch"
+        elif framework.endswith(".pb") or framework == "tensorflow" or framework == "tf":
+            framework = "tensorflow"
+        else:
+            raise ValueError(f"Invalid model file: {framework}")
+
+    # Check backend
+    if backend is None:
+        if framework == "pytorch":
+            backend = "torch"
+        elif framework == "tensorflow":
+            backend = "tensorflow"
+        elif framework == "onnx":
+            backend = "onnx"
+        else:
+            raise ValueError(f"Invalid framework: {framework}")
+
+    # Check mode
+    if mode is None:
+        mode = "inference"
+
     global _CONFIG
     _CONFIG = _Config()
     _CONFIG.backend = backend
@@ -78,6 +106,9 @@ def quantize(model, *args, **kwargs):
 
     """
 
+    if '_CONFIG' not in globals():
+        config(framework=model)
+
     registered_backend = BackendRegistry.get_backend(_CONFIG.backend)
     backend_instance = registered_backend
 
@@ -90,9 +121,13 @@ def quantize(model, *args, **kwargs):
     elif _CONFIG.framework == "tensorflow" or _CONFIG.framework == "tf":
         raise NotImplementedError("TensorFlow backend not implemented yet")
     elif _CONFIG.framework == "onnx":
-        raise NotImplementedError("ONNX backend not implemented yet")
+        return backend_instance.quantize(model, *args, **kwargs)
     else:
         raise ValueError(f"Not supported framework: {_CONFIG.framework}")
+
+def save(quantized_model, output_path: Optional[str] = None):
+    backend_instance = BackendRegistry.get_backend(_CONFIG.backend)
+    return backend_instance.save_quantized_model(quantized_model, output_path)
 
 def clear_globals():
     """

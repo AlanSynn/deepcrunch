@@ -3,7 +3,7 @@ from enum import IntEnum
 class BACKEND_TYPES(IntEnum):
     NEURAL_COMPRESSOR = 0
     TORCH = 1
-    QD = 2
+    ONNX = 2
     DISABLED = 3
 
     def __str__(self):

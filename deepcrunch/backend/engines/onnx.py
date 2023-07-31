@@ -15,6 +15,7 @@ import onnx
 import onnxruntime as ort
 from onnxruntime.quantization import quantize_dynamic, quantize_static, QuantType
 # onnxruntime = LazyImport("onnxruntime")
+float16 = LazyImport("onnxconverter_common.float16")
 # quantize_dynamic = LazyImport("onnxruntime.quantization.quantize_dynamic")
 # quantize_static = LazyImport("onnxruntime.quantization.quantize_static")
 # quantize_qat = LazyImport("onnxruntime.quantization.quantize_qat")
@@ -24,6 +25,7 @@ class ONNX_PTQ_TYPE(IntEnum):
     DYNAMIC = 0
     STATIC = 1
     QAT = 2
+    FLOAT16 = 3
 
     def __str__(self):
         return self.name.lower()
@@ -55,6 +57,10 @@ class ONNXPTQ(PTQBase):
         import onnx
         from onnxruntime.quantization import quantize_dynamic, quantize_static, QuantType
 
+        options = ort.SessionOptions()
+        options.intra_op_num_threads = 1
+        options.inter_op_num_threads = 1
+
         type_str = kwargs.get("type", "dynamic")
         type = ONNX_PTQ_TYPE.from_str(type_str)
 
@@ -64,6 +70,8 @@ class ONNXPTQ(PTQBase):
             rtn = self.onnx_quantize_dynamic(*args, **kwargs)
         elif type == ONNX_PTQ_TYPE.STATIC:
             rtn = self.onnx_quantize_static(*args, **kwargs)
+        elif type == ONNX_PTQ_TYPE.FLOAT16:
+            rtn = self.onnx_quantize_float16(*args, **kwargs)
         elif type == ONNX_PTQ_TYPE.QAT:
             rtn = self.onnx_quantize_qat(*args, **kwargs)
         else:
@@ -92,6 +100,11 @@ class ONNXPTQ(PTQBase):
         onnx.checker.check_model(quantized_model)
 
         return quantized_model
+
+    def onnx_quantize_float16(self, model, output_path: Optional[str]=None, *args, **kwargs):
+        model_fp32 = onnx.load(model)
+        model_fp16 = float16.convert_float_to_float16(model_fp32)
+        return model_fp16
 
     def onnx_quantize_static(self, model, output_path: Optional[str]=None):
         pass

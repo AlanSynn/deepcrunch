@@ -6,6 +6,7 @@ from deepcrunch.utils.os_utils import LazyImport
 
 torch = LazyImport("torch")
 
+
 @dataclass
 class BaseDataclass:
     def to_dict(self, format_for_wandb=False, prefix=""):

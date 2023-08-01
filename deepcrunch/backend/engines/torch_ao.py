@@ -23,7 +23,9 @@ from torch.ao.quantization.qconfig import (
     float16_dynamic_qconfig,
     float_qparams_weight_only_qconfig,
     float_qparams_weight_only_qconfig_4bit,
-    _activation_is_memoryless)
+    _activation_is_memoryless,
+)
+
 
 class TORCH_PTQ(IntEnum):
     DYNAMIC = 0
@@ -38,6 +40,7 @@ class TORCH_PTQ(IntEnum):
     def from_str(cls, string: str):
         return TORCH_PTQ[string.upper()]
 
+
 DTYPE_MAP = {
     "qint8": torch.qint8,
     "quint8": torch.quint8,
@@ -47,8 +50,14 @@ DTYPE_MAP = {
     "quint4x2": torch.quint4x2,
 }
 
+
 class TorchPTQ(PTQBase):
-    def __init__(self, model: torch.nn.Module=None, type: int=TORCH_PTQ.DYNAMIC, config_path: Optional[str]=None):
+    def __init__(
+        self,
+        model: torch.nn.Module = None,
+        type: int = TORCH_PTQ.DYNAMIC,
+        config_path: Optional[str] = None,
+    ):
         """
         Args:
             model: A trained PyTorch or TensorFlow model. Default is None.
@@ -82,11 +91,15 @@ class TorchPTQ(PTQBase):
         elif type == TORCH_PTQ.FX:
             rtn = self.quantize_fx(*args, **kwargs)
         else:
-            raise ValueError(f"Invalid quantization type: {type}. Please choose from: TORCH_PTQ.DYNAMIC, TORCH_PTQ.STATIC, TORCH_PTQ.QAT, TORCH_PTQ.FX")
+            raise ValueError(
+                f"Invalid quantization type: {type}. Please choose from: TORCH_PTQ.DYNAMIC, TORCH_PTQ.STATIC, TORCH_PTQ.QAT, TORCH_PTQ.FX"
+            )
 
         return rtn
 
-    def quantize_dynamic(self, model, output_path: Optional[str]=None, *args, **kwargs):
+    def quantize_dynamic(
+        self, model, output_path: Optional[str] = None, *args, **kwargs
+    ):
         """Quantize the model using dynamic quantization and save it to the specified path.
 
         Args:
@@ -102,34 +115,37 @@ class TorchPTQ(PTQBase):
         if qconfig_spec is None:
             if dtype == torch.qint8:
                 qconfig_spec = {
-                    nn.Linear : default_dynamic_qconfig,
-                    nn.LSTM : default_dynamic_qconfig,
-                    nn.GRU : default_dynamic_qconfig,
-                    nn.LSTMCell : default_dynamic_qconfig,
-                    nn.RNNCell : default_dynamic_qconfig,
-                    nn.GRUCell : default_dynamic_qconfig,
+                    nn.Linear: default_dynamic_qconfig,
+                    nn.LSTM: default_dynamic_qconfig,
+                    nn.GRU: default_dynamic_qconfig,
+                    nn.LSTMCell: default_dynamic_qconfig,
+                    nn.RNNCell: default_dynamic_qconfig,
+                    nn.GRUCell: default_dynamic_qconfig,
                 }
             elif dtype == torch.float16:
                 qconfig_spec = {
-                    nn.Linear : float16_dynamic_qconfig,
-                    nn.LSTM : float16_dynamic_qconfig,
-                    nn.GRU : float16_dynamic_qconfig,
-                    nn.LSTMCell : float16_dynamic_qconfig,
-                    nn.RNNCell : float16_dynamic_qconfig,
-                    nn.GRUCell : float16_dynamic_qconfig,
+                    nn.Linear: float16_dynamic_qconfig,
+                    nn.LSTM: float16_dynamic_qconfig,
+                    nn.GRU: float16_dynamic_qconfig,
+                    nn.LSTMCell: float16_dynamic_qconfig,
+                    nn.RNNCell: float16_dynamic_qconfig,
+                    nn.GRUCell: float16_dynamic_qconfig,
                 }
             elif dtype == torch.quint8:
                 qconfig_spec = {
-                    nn.EmbeddingBag : float_qparams_weight_only_qconfig,
-                    nn.Embedding : float_qparams_weight_only_qconfig,
+                    nn.EmbeddingBag: float_qparams_weight_only_qconfig,
+                    nn.Embedding: float_qparams_weight_only_qconfig,
                 }
             elif dtype == torch.quint4x2:
                 qconfig_spec = {
-                    nn.EmbeddingBag : float_qparams_weight_only_qconfig_4bit,
+                    nn.EmbeddingBag: float_qparams_weight_only_qconfig_4bit,
                 }
             else:
                 raise ValueError(
-                    "Don't know how to quantize with default settings for {}. Provide full qconfig please".format(dtype))
+                    "Don't know how to quantize with default settings for {}. Provide full qconfig please".format(
+                        dtype
+                    )
+                )
         elif isinstance(qconfig_spec, set):
             if dtype is torch.qint8:
                 default_qconfig = default_dynamic_qconfig
@@ -140,7 +156,9 @@ class TorchPTQ(PTQBase):
             elif dtype is torch.quint4x2:
                 default_qconfig = float_qparams_weight_only_qconfig_4bit
             else:
-                raise RuntimeError('Unknown dtype specified for quantize_dynamic: ', str(dtype))
+                raise RuntimeError(
+                    "Unknown dtype specified for quantize_dynamic: ", str(dtype)
+                )
             qconfig_spec = dict(zip(qconfig_spec, itertools.repeat(default_qconfig)))
 
         # Quantize the model
@@ -153,7 +171,7 @@ class TorchPTQ(PTQBase):
 
         return quantized_model
 
-    def quantize_static(self, model, output_path: Optional[str]=None):
+    def quantize_static(self, model, output_path: Optional[str] = None):
         """Quantize the model using static quantization and save it to the specified path.
 
         Args:
@@ -179,7 +197,12 @@ class TorchPTQ(PTQBase):
 
         return quantized_model
 
-    def quantize_qat(self, model, output_path: Optional[str]=None, input_dim: tuple=(1, 3, 224, 224)):
+    def quantize_qat(
+        self,
+        model,
+        output_path: Optional[str] = None,
+        input_dim: tuple = (1, 3, 224, 224),
+    ):
         """Quantize the model using quantization-aware training and save it to the specified path.
 
         Args:
@@ -207,7 +230,9 @@ class TorchPTQ(PTQBase):
 
         return self.model
 
-    def quantize_fx(self, output_path: Optional[str]=None, input_dim: tuple=(1, 3, 224, 224)):
+    def quantize_fx(
+        self, output_path: Optional[str] = None, input_dim: tuple = (1, 3, 224, 224)
+    ):
         """Quantize the model using FX graph mode quantization and save it to the specified path.
 
         Args:
@@ -219,11 +244,15 @@ class TorchPTQ(PTQBase):
         model_to_quantize = copy.deepcopy(self.model)
         model_to_quantize.eval()
 
-        qconfig_mapping = QConfigMapping().set_global(torch.ao.quantization.default_dynamic_qconfig)
+        qconfig_mapping = QConfigMapping().set_global(
+            torch.ao.quantization.default_dynamic_qconfig
+        )
 
-        example_inputs = (torch.randn(input_dim))
+        example_inputs = torch.randn(input_dim)
 
-        model_prepared = quantize_fx.prepare_fx(model_to_quantize, qconfig_mapping, example_inputs)
+        model_prepared = quantize_fx.prepare_fx(
+            model_to_quantize, qconfig_mapping, example_inputs
+        )
         # quantize
         quantized_model = quantize_fx.convert_fx(model_prepared)
 
@@ -264,7 +293,7 @@ class TorchPTQ(PTQBase):
         """
         return self.config_path
 
-    def get_inference_model(self, model, input_dim: tuple=(1, 3, 224, 224)):
+    def get_inference_model(self, model, input_dim: tuple = (1, 3, 224, 224)):
         """Get the inference model.
 
         Returns:

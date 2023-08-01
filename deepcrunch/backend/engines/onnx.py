@@ -14,12 +14,14 @@ from deepcrunch.utils.time import log_elapsed_time
 import onnx
 import onnxruntime as ort
 from onnxruntime.quantization import quantize_dynamic, quantize_static, QuantType
+
 # onnxruntime = LazyImport("onnxruntime")
 float16 = LazyImport("onnxconverter_common.float16")
 # quantize_dynamic = LazyImport("onnxruntime.quantization.quantize_dynamic")
 # quantize_static = LazyImport("onnxruntime.quantization.quantize_static")
 # quantize_qat = LazyImport("onnxruntime.quantization.quantize_qat")
 # QuantType = LazyImport("onnxruntime.quantization.QuantType")
+
 
 class ONNX_PTQ_TYPE(IntEnum):
     DYNAMIC = 0
@@ -34,8 +36,14 @@ class ONNX_PTQ_TYPE(IntEnum):
     def from_str(cls, string: str):
         return ONNX_PTQ_TYPE[string.upper()]
 
+
 class ONNXPTQ(PTQBase):
-    def __init__(self, model = None, type: int=ONNX_PTQ_TYPE.DYNAMIC, config_path: Optional[str]=None):
+    def __init__(
+        self,
+        model=None,
+        type: int = ONNX_PTQ_TYPE.DYNAMIC,
+        config_path: Optional[str] = None,
+    ):
         """
         Args:
             model: A trained PyTorch or TensorFlow model. Default is None.
@@ -55,7 +63,11 @@ class ONNXPTQ(PTQBase):
             type: The type of quantization to perform. Default is dynamic.
         """
         import onnx
-        from onnxruntime.quantization import quantize_dynamic, quantize_static, QuantType
+        from onnxruntime.quantization import (
+            quantize_dynamic,
+            quantize_static,
+            QuantType,
+        )
 
         options = ort.SessionOptions()
         options.intra_op_num_threads = 1
@@ -75,11 +87,15 @@ class ONNXPTQ(PTQBase):
         elif type == ONNX_PTQ_TYPE.QAT:
             rtn = self.onnx_quantize_qat(*args, **kwargs)
         else:
-            raise ValueError(f"Invalid quantization type: {type}. Please choose from: ONNX_PTQ_TYPE.DYNAMIC, ONNX_PTQ_TYPE.STATIC, ONNX_PTQ_TYPE.QAT, ONNX_PTQ_TYPE.FX")
+            raise ValueError(
+                f"Invalid quantization type: {type}. Please choose from: ONNX_PTQ_TYPE.DYNAMIC, ONNX_PTQ_TYPE.STATIC, ONNX_PTQ_TYPE.QAT, ONNX_PTQ_TYPE.FX"
+            )
 
         return rtn
 
-    def onnx_quantize_dynamic(self, model, output_path: Optional[str]=None, *args, **kwargs):
+    def onnx_quantize_dynamic(
+        self, model, output_path: Optional[str] = None, *args, **kwargs
+    ):
         """Quantize the model using dynamic quantization and save it to the specified path.
 
         Args:
@@ -90,7 +106,9 @@ class ONNXPTQ(PTQBase):
         dtype = kwargs.get("dtype", "bfloat16")
 
         if output_path is None:
-            random_string = "".join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            random_string = "".join(
+                random.choices(string.ascii_uppercase + string.digits, k=8)
+            )
             output_path = random_string + "quantized.onnx"
 
         # Quantize the model
@@ -101,15 +119,22 @@ class ONNXPTQ(PTQBase):
 
         return quantized_model
 
-    def onnx_quantize_float16(self, model, output_path: Optional[str]=None, *args, **kwargs):
+    def onnx_quantize_float16(
+        self, model, output_path: Optional[str] = None, *args, **kwargs
+    ):
         model_fp32 = onnx.load(model)
         model_fp16 = float16.convert_float_to_float16(model_fp32)
         return model_fp16
 
-    def onnx_quantize_static(self, model, output_path: Optional[str]=None):
+    def onnx_quantize_static(self, model, output_path: Optional[str] = None):
         pass
 
-    def onnx_quantize_qat(self, model, output_path: Optional[str]=None, input_dim: tuple=(1, 3, 224, 224)):
+    def onnx_quantize_qat(
+        self,
+        model,
+        output_path: Optional[str] = None,
+        input_dim: tuple = (1, 3, 224, 224),
+    ):
         pass
 
     @staticmethod
@@ -140,7 +165,7 @@ class ONNXPTQ(PTQBase):
         """
         return self.config_path
 
-    def get_inference_model(self, model, input_dim: tuple=(1, 3, 224, 224)):
+    def get_inference_model(self, model, input_dim: tuple = (1, 3, 224, 224)):
         """Get the inference model.
 
         Returns:

@@ -24,6 +24,7 @@ from deepcrunch.utils.os_utils import LazyImport
 
 wandb = LazyImport("wandb")
 
+
 class WandbLogger(BaseLogger):
     @run_on_rank_zero
     def __init__(

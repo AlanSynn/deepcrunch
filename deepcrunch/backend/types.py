@@ -1,5 +1,6 @@
 from enum import IntEnum
 
+
 class BACKEND_TYPES(IntEnum):
     NEURAL_COMPRESSOR = 0
     TORCH = 1

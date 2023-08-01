@@ -1,6 +1,7 @@
 from typing import Optional
 from deepcrunch.backend.backend_registry import BackendRegistry
 
+
 class _Config:
     def __init__(self):
         self.framework = "pytorch"
@@ -35,7 +36,12 @@ class _Config:
         else:
             raise AttributeError(f"Invalid attribute: {name}")
 
-def config(framework: Optional[str] = None, backend: Optional[str] = None, mode: Optional[str] = None):
+
+def config(
+    framework: Optional[str] = None,
+    backend: Optional[str] = None,
+    mode: Optional[str] = None,
+):
     """
     Configures the framework and mode for the DeepCrunch library.
 
@@ -56,9 +62,16 @@ def config(framework: Optional[str] = None, backend: Optional[str] = None, mode:
     if isinstance(framework, str):
         if framework.endswith(".onnx") or framework == "onnx":
             framework = "onnx"
-        elif framework.endswith(".pt") or framework.endswith(".pth") or framework == "pytorch" or framework == "torch":
+        elif (
+            framework.endswith(".pt")
+            or framework.endswith(".pth")
+            or framework == "pytorch"
+            or framework == "torch"
+        ):
             framework = "pytorch"
-        elif framework.endswith(".pb") or framework == "tensorflow" or framework == "tf":
+        elif (
+            framework.endswith(".pb") or framework == "tensorflow" or framework == "tf"
+        ):
             framework = "tensorflow"
         else:
             raise ValueError(f"Invalid model file: {framework}")
@@ -84,6 +97,7 @@ def config(framework: Optional[str] = None, backend: Optional[str] = None, mode:
     _CONFIG.framework = framework
     _CONFIG.mode = mode
 
+
 def quantize(model, *args, **kwargs):
     """
     Quantizes the given model using the specified backend.
@@ -106,7 +120,7 @@ def quantize(model, *args, **kwargs):
 
     """
 
-    if '_CONFIG' not in globals():
+    if "_CONFIG" not in globals():
         config(framework=model)
 
     registered_backend = BackendRegistry.get_backend(_CONFIG.backend)
@@ -125,9 +139,11 @@ def quantize(model, *args, **kwargs):
     else:
         raise ValueError(f"Not supported framework: {_CONFIG.framework}")
 
+
 def save(quantized_model, output_path: Optional[str] = None):
     backend_instance = BackendRegistry.get_backend(_CONFIG.backend)
     return backend_instance.save_quantized_model(quantized_model, output_path)
+
 
 def clear_globals():
     """

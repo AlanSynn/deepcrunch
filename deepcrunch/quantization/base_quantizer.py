@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 
-from torch import nn
-
 from deepcrunch.utils.dynamic_load import ModuleLoader
 from deepcrunch.utils.exceptions import InvalidQuantizationConfigException
+from deepcrunch.utils.os_utils import LazyImport
+
+nn = LazyImport("torch.nn")
 
 
 class BaseQuantizer(ABC):

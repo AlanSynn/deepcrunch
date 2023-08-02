@@ -20,6 +20,6 @@ dependencies:
   - onnxruntime
   - onnxconverter-common
 
-  - pip:
-    # third party packages - distributed computing
-    - pytest-cov
+# third party packages - distributed computing
+  - pytest
+  - pytest-cov

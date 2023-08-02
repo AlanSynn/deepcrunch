@@ -12,10 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from torch.quantization import quantize_dynamic
-
 from deepcrunch.quantization.base_quantizer import BaseQuantizer
 from deepcrunch.utils.exceptions import InvalidQuantizationConfigException
+from deepcrunch.utils.os_utils import LazyImport
+
+quantize_dynamic = LazyImport("torch.quantization.quantize_dynamic")
 
 
 class NaiveQuantizer(BaseQuantizer):

@@ -38,8 +38,6 @@ jobs:
         # environment-file is not assumed anymore
         environment-file: environment.yml
     - run: |
-        pip install pytest
-        pip install pytest-cov
         pytest --cov=./ --cov-report=xml
         pytest --version
         pytest
@@ -48,10 +46,3 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        directory: ./coverage/reports/
-        env_vars: OS,PYTHON
-        fail_ci_if_error: true
-        files: ./coverage1.xml,./coverage2.xml,!./cache
-        flags: unittests
-        name: codecov-umbrella
-        verbose: true

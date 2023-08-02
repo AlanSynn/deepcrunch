@@ -3,20 +3,6 @@ from copy import copy
 from enum import IntEnum
 from typing import Optional
 
-from torch.ao.quantization import (
-    QConfigMapping,
-    get_default_qat_qconfig_mapping,
-    get_default_qconfig_mapping,
-)
-from torch.ao.quantization.qconfig import (
-    _activation_is_memoryless,
-    _add_module_to_qconfig_obs_ctr,
-    default_dynamic_qconfig,
-    float16_dynamic_qconfig,
-    float_qparams_weight_only_qconfig,
-    float_qparams_weight_only_qconfig_4bit,
-)
-
 from deepcrunch import logger
 from deepcrunch.backend.engines.base_backend import (
     PostTrainingQuantizationBaseWrapper as PTQBase,
@@ -25,6 +11,33 @@ from deepcrunch.utils.os_utils import LazyImport
 from deepcrunch.utils.time import log_elapsed_time
 
 torch = LazyImport("torch")
+
+QconfigMapping = LazyImport("torch.ao.quantization.QConfigMapping")
+get_default_qat_qconfig_mapping = LazyImport(
+    "torch.ao.quantization.get_default_qat_qconfig_mapping"
+)
+get_default_qconfig_mapping = LazyImport(
+    "torch.ao.quantization.get_default_qconfig_mapping"
+)
+
+_activation_is_memoryless = LazyImport(
+    "torch.ao.quantization.qconfig._activation_is_memoryless"
+)
+_add_module_to_qconfig_obs_ctr = LazyImport(
+    "torch.ao.quantization.qconfig._add_module_to_qconfig_obs_ctr"
+)
+default_dynamic_qconfig = LazyImport(
+    "torch.ao.quantization.qconfig.default_dynamic_qconfig"
+)
+float16_dynamic_qconfig = LazyImport(
+    "torch.ao.quantization.qconfig.float16_dynamic_qconfig"
+)
+float_qparams_weight_only_qconfig = LazyImport(
+    "torch.ao.quantization.qconfig.float_qparams_weight_only_qconfig"
+)
+float_qparams_weight_only_qconfig_4bit = LazyImport(
+    "torch.ao.quantization.qconfig.float_qparams_weight_only_qconfig_4bit"
+)
 
 
 class TORCH_PTQ(IntEnum):

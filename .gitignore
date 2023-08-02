@@ -310,6 +310,9 @@ $RECYCLE.BIN/
 
 ### Visualization Patch ###
 
+# any onnx files
+*.onnx
+
 # Wandb
 wandb/
 
@@ -317,10 +320,13 @@ wandb/
 
 # Temporal files
 tmp
+<<<<<<< Updated upstream
 temp
 *.tmp
 
 # Archive files
+=======
+>>>>>>> Stashed changes
 *.zip
 
 # End of custom gitignore for this project

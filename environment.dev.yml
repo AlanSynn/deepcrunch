@@ -11,8 +11,8 @@ dependencies:
 # linting and formatting
   - black=23.3.0
   - flake8=6.1.0
-  - autopep8
-  - isort
+  - autopep8=2.0.2
+  - isort=5.12.0
   - clang-format=16.0.6
   - pre-commit
 
@@ -39,10 +39,9 @@ dependencies:
   - onnxruntime
   - onnxconverter-common
 
-  - pip:
-    # third party packages - distributed computing
-    - pytest-cov
+# third party packages - distributed computing
+  - pytest
+  - pytest-cov
 
-    # documentation tools
-    - sphinx
-    - pydata-sphinx-theme
+  - sphinx
+  - pydata-sphinx-theme

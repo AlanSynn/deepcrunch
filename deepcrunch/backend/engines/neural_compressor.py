@@ -21,7 +21,7 @@ class NeuralCompressorPTQ(PTQBase):
         """
         self.model = model
         self.config_path = config_path
-        super().__init__()
+        super().__init__(self.model, self.config_path)
 
     @log_elapsed_time(customized_msg="Quantization time: {elapsed_time:.2f} seconds")
     def quantize(self, output_path):

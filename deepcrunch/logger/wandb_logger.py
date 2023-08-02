@@ -19,8 +19,8 @@
 from typing import Any, Dict, Optional
 
 from deepcrunch.logger.base_logger import BaseLogger
-from deepcrunch.utils.torch_utils import run_on_rank_zero
 from deepcrunch.utils.os_utils import LazyImport
+from deepcrunch.utils.torch_utils import run_on_rank_zero
 
 wandb = LazyImport("wandb")
 

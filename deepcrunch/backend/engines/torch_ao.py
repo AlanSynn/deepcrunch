@@ -1,7 +1,22 @@
+import itertools
 from copy import copy
 from enum import IntEnum
-import itertools
 from typing import Optional
+
+from torch.ao.quantization import (
+    QConfigMapping,
+    get_default_qat_qconfig_mapping,
+    get_default_qconfig_mapping,
+)
+from torch.ao.quantization.qconfig import (
+    _activation_is_memoryless,
+    _add_module_to_qconfig_obs_ctr,
+    default_dynamic_qconfig,
+    float16_dynamic_qconfig,
+    float_qparams_weight_only_qconfig,
+    float_qparams_weight_only_qconfig_4bit,
+)
+
 from deepcrunch import logger
 from deepcrunch.backend.engines.base_backend import (
     PostTrainingQuantizationBaseWrapper as PTQBase,
@@ -10,21 +25,6 @@ from deepcrunch.utils.os_utils import LazyImport
 from deepcrunch.utils.time import log_elapsed_time
 
 torch = LazyImport("torch")
-
-from torch.ao.quantization import (
-    get_default_qconfig_mapping,
-    get_default_qat_qconfig_mapping,
-    QConfigMapping,
-)
-
-from torch.ao.quantization.qconfig import (
-    _add_module_to_qconfig_obs_ctr,
-    default_dynamic_qconfig,
-    float16_dynamic_qconfig,
-    float_qparams_weight_only_qconfig,
-    float_qparams_weight_only_qconfig_4bit,
-    _activation_is_memoryless,
-)
 
 
 class TORCH_PTQ(IntEnum):

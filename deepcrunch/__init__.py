@@ -6,9 +6,7 @@
 # __all__ = ["TrainerWrapper", "ModelWrapper"]
 
 from deepcrunch.deepcrunch import config, quantize, save
-
 from deepcrunch.performance import e2e_latency, size_in_mb
-
 
 __all__ = [
     "config",

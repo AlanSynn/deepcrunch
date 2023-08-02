@@ -1,12 +1,11 @@
-from deepcrunch.backend.types import BACKEND_TYPES
-from deepcrunch.utils.os_utils import LazyImport
-
 # TODO: Lazy import backends
 from deepcrunch.backend.engines.neural_compressor import (
     NeuralCompressorPTQ as NeuralCompressor,
 )
-from deepcrunch.backend.engines.torch_ao import TorchPTQ as Torch
 from deepcrunch.backend.engines.onnx import ONNXPTQ as onnx
+from deepcrunch.backend.engines.torch_ao import TorchPTQ as Torch
+from deepcrunch.backend.types import BACKEND_TYPES
+from deepcrunch.utils.os_utils import LazyImport
 
 # qd = LazyImport('qd')
 # deepcrunch = LazyImport('deepcrunch.compressor')

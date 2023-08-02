@@ -1,19 +1,20 @@
-from copy import copy
-from enum import IntEnum
 import itertools
 import random
 import string
+from copy import copy
+from enum import IntEnum
 from typing import Optional
+
+import onnx
+import onnxruntime as ort
+from onnxruntime.quantization import QuantType, quantize_dynamic, quantize_static
+
 from deepcrunch import logger
 from deepcrunch.backend.engines.base_backend import (
     PostTrainingQuantizationBaseWrapper as PTQBase,
 )
 from deepcrunch.utils.os_utils import LazyImport
 from deepcrunch.utils.time import log_elapsed_time
-
-import onnx
-import onnxruntime as ort
-from onnxruntime.quantization import quantize_dynamic, quantize_static, QuantType
 
 # onnxruntime = LazyImport("onnxruntime")
 float16 = LazyImport("onnxconverter_common.float16")
@@ -64,9 +65,9 @@ class ONNXPTQ(PTQBase):
         """
         import onnx
         from onnxruntime.quantization import (
+            QuantType,
             quantize_dynamic,
             quantize_static,
-            QuantType,
         )
 
         options = ort.SessionOptions()

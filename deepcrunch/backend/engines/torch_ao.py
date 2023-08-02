@@ -42,6 +42,7 @@ float_qparams_weight_only_qconfig_4bit = LazyImport(
 # import torch.quantization
 # from torch.quantization import QuantStub, DeQuantStub
 
+
 class TORCH_PTQ(IntEnum):
     DYNAMIC = 0
     STATIC = 1

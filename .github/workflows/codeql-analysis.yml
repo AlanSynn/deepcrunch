@@ -5,6 +5,10 @@
 # or to provide custom queries or build logic.
 #
 # ******** NOTE ********
+#
+# Date: 2023-08-01
+# Alan: Since this is currently closed source project, it is not possible to run this workflow
+#
 # We have attempted to detect the languages in your repository. Please check
 # the `language` matrix defined below to confirm you have the correct set of
 # supported CodeQL languages.

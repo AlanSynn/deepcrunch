@@ -8,32 +8,18 @@ dependencies:
   - python=3.10
   - pip=23.1.2
 
-# linting and formatting
-  - black=23.3.0
-  - flake8
-  - autopep8
-  - isort
-  - clang-format
-
 # build tools
   - make
   - setuptools=68.0.0
 
-# miscellenous tools
-  - go # addlicense
-
-# third party packages - data science
-  - numpy
-  - hypothesis
-  - jupyterlab
-  - ipywidgets
-  - plotly_express
-  - wandb
-
 # third party packages - deep learning
   - pytorch
 
+# third party packages - onnx
+  - onnx
+  - onnxruntime
+  - onnxconverter-common
+
   - pip:
-# third party packages - distributed computing
-    - ray[air]
+    # third party packages - distributed computing
     - pytest-cov

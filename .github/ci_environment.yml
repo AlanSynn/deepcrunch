@@ -3,10 +3,11 @@ channels:
   - conda-forge
 dependencies:
   - python=3.10
-  - black=23.3.0
-  - flake8
-  - make
-  - autopep8
-  - isort
-  - setuptools=68.0.0
   - pip=23.1.2
+  - black=23.3.0
+  - flake8=6.1.0
+  - autopep8=2.0.2
+  - isort=5.12.0
+  - clang-format=16.0.6
+  - make
+  - setuptools=68.0.0

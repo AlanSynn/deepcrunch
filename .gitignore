@@ -298,9 +298,17 @@ $RECYCLE.BIN/
 
 ### PyTorch Patch ###
 
-# any pth files
+# Any pth files
 *.pth.tar
 *.pth
+*.pt
+
+### ONNX Patch ###
+
+# Any Onnx files
+*.onnx
+
+### Visualization Patch ###
 
 # Wandb
 wandb/
@@ -309,5 +317,10 @@ wandb/
 
 # Temporal files
 tmp
+temp
+*.tmp
+
+# Archive files
+*.zip
 
 # End of custom gitignore for this project

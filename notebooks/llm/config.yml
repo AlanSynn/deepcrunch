@@ -1,0 +1,9 @@
+# config.yaml
+version: 2.0
+
+model:
+  name: distilbert
+  framework: pytorch_fx
+tuning:
+  accuracy_criterion:
+    relative: 0.01

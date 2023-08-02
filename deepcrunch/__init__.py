@@ -1,11 +1,17 @@
-"""
-DeepCrunch: An automated library for practical and efficient deep learning model compression.
-This project is a part of the LG U+ Global Summer Internship.
+# from deepcrunch.core.model import ModelWrapper
+# from deepcrunch.core.trainer import TrainerWrapper
 
-Created by Alan Synn (alan@alansynn.com) MLOps team.
-"""
+# from .main import config, quantize
 
-from deepcrunch.core.trainer import TrainerWrapper
-from deepcrunch.core.model import ModelWrapper
+# __all__ = ["TrainerWrapper", "ModelWrapper"]
 
-__all__ = ["TrainerWrapper", "ModelWrapper"]
+from deepcrunch.deepcrunch import config, quantize, save
+from deepcrunch.performance import e2e_latency, size_in_mb
+
+__all__ = [
+    "config",
+    "quantize",
+    "save",
+    "e2e_latency",
+    "size_in_mb",
+]

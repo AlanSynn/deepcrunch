@@ -1,0 +1,57 @@
+# This GitHub Action performs code linting and sanity checks on pull request events
+name: Testing
+
+# Trigger the workflow on pull request events
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  packages: write
+
+# Default shell for all run steps
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: '3.10'
+    steps:
+    # Check out a copy of your repository under $GITHUB_WORKSPACE
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    # Set up a conda environment using the specified environment file
+    - name: Setup Conda environment from environment.yml
+      uses: mamba-org/setup-micromamba@v1
+      with:
+        # environment-file is not assumed anymore
+        environment-file: environment.yml
+    - run: |
+        pip install pytest
+        pip install pytest-cov
+        pytest --cov=./ --cov-report=xml
+        pytest --version
+        pytest
+      shell: micromamba-shell {0}
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage/reports/
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true
+        files: ./coverage1.xml,./coverage2.xml,!./cache
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true

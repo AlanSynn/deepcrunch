@@ -1,10 +1,14 @@
-# This GitHub Action performs code linting and sanity checks on pull request events
-name: 'Perform Sanity Checks and Linting'
+# This GitHub Action performs code linting on pull request events
+name: 'Linting'
 
 # Trigger the workflow on pull request events
 on:
   pull_request:
     branches: [ main ]
+
+permissions:
+  contents: read
+  packages: write
 
 # Default shell for all run steps
 defaults:
@@ -25,17 +29,17 @@ jobs:
 
       # Set up a conda environment using the specified environment file
       - name: Setup Conda environment from environment.yml
-        uses: mamba-org/provision-with-micromamba@main
+        uses: mamba-org/setup-micromamba@v1
         with:
+          # environment-file is not assumed anymore
           environment-file: .github/ci_environment.yml
+          # now called cache-environment
+          cache-environment: true
+          post-cleanup: 'all'
 
-      # Run black lint
-      - name: Perform Linting with Black
-        run: make lint/black
-
-      # Run isort lint
-      - name: Perform Sorting Imports Check with isort
-        run: make lint/isort
+      # Run linting
+      - name: Perform Linting
+        run: make lint
 
       # Uncomment the following lines to run the build tests
       # Commented by: Alan Synn (alan@alansynn.com)

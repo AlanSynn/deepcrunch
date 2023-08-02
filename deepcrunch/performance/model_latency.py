@@ -1,9 +1,16 @@
-import onnxruntime as ort
-import numpy as np
 import time
+
+import numpy as np
+import onnxruntime as ort
 from tqdm import tqdm, trange
 
-def do_inference(model_path, output_string, input_dim=(1, 3, 224, 224) ,providers=['CPUExecutionProvider']):
+
+def do_inference(
+    model_path,
+    output_string,
+    input_dim=(1, 3, 224, 224),
+    providers=["CPUExecutionProvider"],
+):
     origin_ort_session = ort.InferenceSession(model_path, providers=providers)
 
     warm_up_count = 5

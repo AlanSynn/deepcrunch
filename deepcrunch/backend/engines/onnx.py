@@ -2,14 +2,20 @@ import itertools
 import random
 import string
 import tempfile
-from pathlib import Path
 from copy import copy
 from enum import IntEnum
+from pathlib import Path
 from typing import Optional
 
 import onnx
 import onnxruntime as ort
-from onnxruntime.quantization import QuantType, quantize_dynamic, quantize_static, QuantFormat, quant_pre_process
+from onnxruntime.quantization import (
+    QuantFormat,
+    QuantType,
+    quant_pre_process,
+    quantize_dynamic,
+    quantize_static,
+)
 
 from deepcrunch import logger
 from deepcrunch.backend.engines.base_backend import (
@@ -126,25 +132,25 @@ class ONNXPTQ(PTQBase):
                 skip_optimization = True
 
             quant_pre_process(
-                input_model_path = model,
-                output_model_path = temp_path / "pre.quant.onnx",
-                skip_optimization = skip_optimization,
-                skip_onnx_shape = False,
-                skip_symbolic_shape = False,
-                auto_merge = False,
-                int_max = 2**31 - 1,
-                guess_output_rank = False,
-                verbose = 0,
-                save_as_external_data = False,
-                all_tensors_to_one_file = False,
-                external_data_location = None,
-                external_data_size_threshold = 1024,
+                input_model_path=model,
+                output_model_path=temp_path / "pre.quant.onnx",
+                skip_optimization=skip_optimization,
+                skip_onnx_shape=False,
+                skip_symbolic_shape=False,
+                auto_merge=False,
+                int_max=2**31 - 1,
+                guess_output_rank=False,
+                verbose=0,
+                save_as_external_data=False,
+                all_tensors_to_one_file=False,
+                external_data_location=None,
+                external_data_size_threshold=1024,
             )
 
             # Quantize the model
             quantize_dynamic(
-                model_input = temp_path / "pre.quant.onnx",
-                model_output = output_path,
+                model_input=temp_path / "pre.quant.onnx",
+                model_output=output_path,
                 op_types_to_quantize=None,
                 per_channel=False,
                 reduce_range=False,
@@ -176,7 +182,16 @@ class ONNXPTQ(PTQBase):
             print(f"Quantized model saved to {output_path}")
         return model_fp16
 
-    def onnx_quantize_static(self, model, output_path: Optional[str] = None, calibration_dataset: Optional[str] = None, quant_format = QuantFormat.QDQ, per_channel=False, *args, **kwargs):
+    def onnx_quantize_static(
+        self,
+        model,
+        output_path: Optional[str] = None,
+        calibration_dataset: Optional[str] = None,
+        quant_format=QuantFormat.QDQ,
+        per_channel=False,
+        *args,
+        **kwargs,
+    ):
         if calibration_dataset is None:
             raise ValueError("Calibration dataset is required for static quantization.")
 
@@ -203,7 +218,6 @@ class ONNXPTQ(PTQBase):
         onnx.checker.check_model(quantized_model)
 
         return quantized_model
-
 
     def onnx_quantize_qat(
         self,

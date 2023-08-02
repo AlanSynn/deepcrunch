@@ -3,9 +3,11 @@ import random
 import uuid
 from typing import Callable
 
-import numpy as np
-import torch
-from torch import nn
+from deepcrunch.utils.os_utils import LazyImport
+
+np = LazyImport("numpy")
+torch = LazyImport("torch")
+nn = LazyImport("torch.nn")
 
 FILE_SIZE_IDENTIFIER = {
     "KB": 1e3,

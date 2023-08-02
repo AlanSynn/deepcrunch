@@ -4,10 +4,9 @@ from deepcrunch.backend.engines.base_backend import (
 from deepcrunch.utils.os_utils import LazyImport
 from deepcrunch.utils.time import log_elapsed_time
 
-neural_compressor = LazyImport("neural_compressor")
-
-Quantization = LazyImport("neural_compressor.experimental.Quantization")
-common = LazyImport("neural_compressor.experimental.common")
+import neural_compressor
+from neural_compressor import quantization
+from neural_compressor.config import PostTrainingQuantConfig
 
 
 class NeuralCompressorPTQ(PTQBase):
@@ -24,23 +23,32 @@ class NeuralCompressorPTQ(PTQBase):
         super().__init__(self.model, self.config_path)
 
     @log_elapsed_time(customized_msg="Quantization time: {elapsed_time:.2f} seconds")
-    def quantize(self, output_path):
+    def quantize(self, model, output_path, calib_dataloader = None, eval_func = None):
         """Quantize the model and save it to the specified path.
 
         Args:
             output_path: Path to save the quantized model.
         """
         # Create a quantizer
-        quantizer = Quantization(self.config_path)
+        # Quantization code
 
-        # Set the model to be quantized
-        quantizer.model = common.Model(self.model)
-
-        # Perform quantization
-        q_model = quantizer()
-
-        # Save the quantized model
+        conf = PostTrainingQuantConfig()
+        q_model = quantization.fit(model=model,
+                                conf=conf,
+                                calib_dataloader=calib_dataloader,
+                                eval_func=eval_func)
         q_model.save(output_path)
+
+        # quantizer = Quantization(self.config_path)
+
+        # # Set the model to be quantized
+        # quantizer.model = common.Model(self.model)
+
+        # # Perform quantization
+        # q_model = quantizer()
+
+        # # Save the quantized model
+        # q_model.save(output_path)
         print(f"Quantized model saved to {output_path}")
 
         return q_model

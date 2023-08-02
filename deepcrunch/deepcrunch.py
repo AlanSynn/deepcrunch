@@ -7,7 +7,7 @@ class _Config:
     def __init__(self):
         self.framework = "pytorch"
         self.mode = "inference"
-        self.backend = "torch"
+        self.backend = "neural_compressor"
 
     def __repr__(self):
         return f"Config(framework={self.framework}, mode={self.mode}, backend={self.backend})"
@@ -99,7 +99,7 @@ def config(
     _CONFIG.mode = mode
 
 
-def quantize(model, *args, **kwargs):
+def quantize(model, backend="neural_compressor", *args, **kwargs):
     """
     Quantizes the given model using the specified backend.
 
@@ -122,7 +122,7 @@ def quantize(model, *args, **kwargs):
     """
 
     if "_CONFIG" not in globals():
-        config(framework=model)
+        config(framework=model, backend=backend)
 
     registered_backend = BackendRegistry.get_backend(_CONFIG.backend)
     backend_instance = registered_backend

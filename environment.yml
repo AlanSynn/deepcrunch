@@ -15,22 +15,6 @@ dependencies:
 # third party packages - deep learning
   - pytorch
 
-<<<<<<< Updated upstream
-# third party packages - onnx
-  - onnx
-  - onnxruntime
-  - onnxconverter-common
-
-  - pip:
-    # third party packages - distributed computing
-    - pytest-cov
-=======
-<<<<<<< Updated upstream
-  - pip:
-# third party packages - distributed computing
-    - ray[air]
-    - pytest-cov
-=======
 # third party packages - onnx
   - onnx
   - onnxruntime
@@ -39,8 +23,3 @@ dependencies:
 # third party packages - distributed computing
   - pytest
   - pytest-cov
-
-  - sphinx
-  - pydata-sphinx-theme
->>>>>>> Stashed changes
->>>>>>> Stashed changes

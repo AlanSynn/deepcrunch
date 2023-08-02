@@ -10,10 +10,10 @@ dependencies:
 
 # linting and formatting
   - black=23.3.0
-  - flake8
+  - flake8=6.1.0
   - autopep8
   - isort
-  - clang-format
+  - clang-format=16.0.6
   - pre-commit
 
 # build tools

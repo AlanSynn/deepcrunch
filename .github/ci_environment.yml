@@ -11,3 +11,4 @@ dependencies:
   - clang-format=16.0.6
   - make
   - setuptools=68.0.0
+  - nbstripout

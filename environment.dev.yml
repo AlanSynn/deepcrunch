@@ -32,11 +32,11 @@ dependencies:
   - wandb
 
 # third party packages - deep learning
-  - pytorch
+  - pytorch=1.11
 
 # third party packages - onnx
   - onnx
-  - onnxruntime
+  - onnxruntime=1.14
   - onnxconverter-common
 
 # third party packages - distributed computing

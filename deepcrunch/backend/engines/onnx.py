@@ -2,7 +2,6 @@ import itertools
 import random
 import string
 import tempfile
-from pathlib import Path
 from copy import copy
 from enum import IntEnum
 from pathlib import Path
@@ -133,19 +132,19 @@ class ONNXPTQ(PTQBase):
                 skip_optimization = True
 
             quant_pre_process(
-                input_model_path = model,
-                output_model_path = temp_path / "pre.quant.onnx",
-                skip_optimization = skip_optimization,
-                skip_onnx_shape = False,
-                skip_symbolic_shape = False,
-                auto_merge = False,
-                int_max = 2**31 - 1,
-                guess_output_rank = False,
-                verbose = 0,
-                save_as_external_data = False,
-                all_tensors_to_one_file = False,
-                external_data_location = None,
-                external_data_size_threshold = 1024,
+                input_model_path=model,
+                output_model_path=temp_path / "pre.quant.onnx",
+                skip_optimization=skip_optimization,
+                skip_onnx_shape=False,
+                skip_symbolic_shape=False,
+                auto_merge=False,
+                int_max=2**31 - 1,
+                guess_output_rank=False,
+                verbose=0,
+                save_as_external_data=False,
+                all_tensors_to_one_file=False,
+                external_data_location=None,
+                external_data_size_threshold=1024,
             )
 
             # Quantize the model

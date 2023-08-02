@@ -13,13 +13,16 @@ dependencies:
   - setuptools=68.0.0
 
 # third party packages - deep learning
-  - pytorch
+  - pytorch=1.11
 
 # third party packages - onnx
   - onnx
-  - onnxruntime
   - onnxconverter-common
 
 # third party packages - distributed computing
   - pytest
   - pytest-cov
+
+# PIP packages
+  - pip:
+    - onnxruntime-gpu==1.14

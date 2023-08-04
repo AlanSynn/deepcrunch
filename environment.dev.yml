@@ -40,6 +40,9 @@ dependencies:
   - onnxruntime=1.14
   - onnxconverter-common
 
+# third party packages - neural compressor
+  - neural-compressor
+
 # third party packages - distributed computing
   - pytest
   - pytest-cov

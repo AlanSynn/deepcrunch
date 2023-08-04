@@ -5,6 +5,9 @@ name: Testing
 on:
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '**.rst'
+      - '**.md'
 
 permissions:
   contents: read

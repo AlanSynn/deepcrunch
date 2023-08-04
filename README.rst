@@ -176,7 +176,7 @@ DeepCrunch is a proprietary software owned by LG U+. All rights reserved. Please
 .. |test| image:: https://github.com/AlanSynn/deepcrunch/actions/workflows/test.yml/badge.svg
     :target: https://github.com/AlanSynn/deepcrunch/actions/workflows/test.yml
     :alt: Testing
-.. |codecov| image:: https://codecov.io/gh/AlanSynn/deepcrunch/branch/main/graph/badge.svg
+.. |codecov| image:: https://codecov.io/gh/AlanSynn/deepcrunch/branch/main/graph/badge.svg?token=UFSCNCO5AZ
     :target: https://codecov.io/gh/AlanSynn/deepcrunch
     :alt: Code Coverage
 .. |docs| image:: https://github.com/AlanSynn/deepcrunch/actions/workflows/docs.yml/badge.svg

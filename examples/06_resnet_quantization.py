@@ -6,7 +6,6 @@ Shows practical compression for production deployment.
 """
 
 import torch
-import torch.nn as nn
 import torchvision.models as models
 from deepcrunch.backend.backend_registry import BackendRegistry
 import time
@@ -49,7 +48,7 @@ def main():
         # Try to load pretrained model
         model = models.resnet18(pretrained=True)
         print("   ✓ Loaded pretrained ResNet-18")
-    except:
+    except Exception:
         # If no internet, create random initialized model
         model = models.resnet18(pretrained=False)
         print("   ✓ Created ResNet-18 (random weights)")
@@ -148,7 +147,7 @@ def main():
     backend.model = model
 
     try:
-        qat_model = backend.quantize(type="qat")
+        backend.quantize(type="qat")
         print(f"   ✓ QAT model prepared")
         print(f"   Ready for fine-tuning with quantization simulation")
         print(f"   After training, convert to quantized model for deployment")

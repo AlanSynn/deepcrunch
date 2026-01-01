@@ -25,7 +25,7 @@ class LSTMClassifier(nn.Module):
 
     def forward(self, x):
         # x shape: (batch, seq_len, input_size)
-        lstm_out, (hidden, cell) = self.lstm(x)
+        lstm_out, _ = self.lstm(x)
         # Use the last hidden state
         out = self.fc(lstm_out[:, -1, :])
         return out

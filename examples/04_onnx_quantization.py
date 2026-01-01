@@ -10,7 +10,6 @@ import tempfile
 import torch
 import torch.nn as nn
 import numpy as np
-import onnx
 import onnxruntime as ort
 from deepcrunch.backend.backend_registry import BackendRegistry
 

@@ -1,17 +1,14 @@
 """End-to-end tests for ONNX backend quantization."""
 
 import os
-import tempfile
-from pathlib import Path
 
 import numpy as np
 import onnx
 import onnxruntime as ort
 import pytest
-import torch
 
 from deepcrunch.backend.backend_registry import BackendRegistry
-from deepcrunch.backend.engines.onnx import ONNX_PTQ_TYPE, ONNXPTQ
+from tests.conftest import CalibrationDataReader
 
 
 class TestONNXDynamicQuantization:
@@ -25,7 +22,7 @@ class TestONNXDynamicQuantization:
 
         # Quantize model
         output_path = str(temp_dir / "quantized_dynamic.onnx")
-        quantized_path = backend.quantize(
+        backend.quantize(
             type="dynamic",
             output_path=output_path,
         )
@@ -104,19 +101,6 @@ class TestONNXStaticQuantization:
 
     def test_static_quantization_with_calibration(self, onnx_model_path, temp_dir):
         """Test static quantization with calibration data."""
-        # Create calibration data reader
-        class CalibrationDataReader:
-            def __init__(self):
-                self.data = [np.random.randn(1, 10).astype(np.float32) for _ in range(10)]
-                self.index = 0
-
-            def get_next(self):
-                if self.index < len(self.data):
-                    input_data = {"input": self.data[self.index]}
-                    self.index += 1
-                    return input_data
-                return None
-
         # Get backend
         backend = BackendRegistry.get_backend("onnx")
         backend.model = onnx_model_path
@@ -124,7 +108,7 @@ class TestONNXStaticQuantization:
         output_path = str(temp_dir / "quantized_static.onnx")
 
         # Quantize with calibration data
-        calibration_reader = CalibrationDataReader()
+        calibration_reader = CalibrationDataReader(num_samples=10, input_shape=(1, 10))
         backend.quantize(
             type="static",
             output_path=output_path,
@@ -138,19 +122,6 @@ class TestONNXStaticQuantization:
 
     def test_static_quantization_inference(self, onnx_model_path, temp_dir):
         """Test inference with statically quantized ONNX model."""
-        # Create calibration data reader
-        class CalibrationDataReader:
-            def __init__(self):
-                self.data = [np.random.randn(1, 10).astype(np.float32) for _ in range(10)]
-                self.index = 0
-
-            def get_next(self):
-                if self.index < len(self.data):
-                    input_data = {"input": self.data[self.index]}
-                    self.index += 1
-                    return input_data
-                return None
-
         # Original model inference
         original_session = ort.InferenceSession(onnx_model_path)
         input_name = original_session.get_inputs()[0].name
@@ -162,7 +133,7 @@ class TestONNXStaticQuantization:
         backend.model = onnx_model_path
 
         output_path = str(temp_dir / "quantized_static.onnx")
-        calibration_reader = CalibrationDataReader()
+        calibration_reader = CalibrationDataReader(num_samples=10, input_shape=(1, 10))
         backend.quantize(
             type="static",
             output_path=output_path,
@@ -331,7 +302,7 @@ class TestONNXErrorHandling:
 
         output_path = str(temp_dir / "output.onnx")
 
-        with pytest.raises((FileNotFoundError, Exception)):
+        with pytest.raises((FileNotFoundError, RuntimeError)):
             backend.quantize(type="dynamic", output_path=output_path)
 
     def test_invalid_quantization_type(self, onnx_model_path, temp_dir):
@@ -341,7 +312,7 @@ class TestONNXErrorHandling:
 
         output_path = str(temp_dir / "output.onnx")
 
-        with pytest.raises((ValueError, Exception)):
+        with pytest.raises(ValueError):
             backend.quantize(type="invalid_type", output_path=output_path)
 
 

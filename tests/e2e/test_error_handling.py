@@ -1,7 +1,6 @@
 """End-to-end tests for error handling and edge cases."""
 
 import os
-import tempfile
 
 import pytest
 import torch
@@ -18,7 +17,7 @@ class TestTorchErrorHandling:
         backend = BackendRegistry.get_backend("torch")
         backend.model = simple_linear_model
 
-        with pytest.raises((ValueError, KeyError, AttributeError, Exception)):
+        with pytest.raises((ValueError, KeyError, AttributeError)):
             backend.quantize(type="invalid_type")
 
     def test_invalid_dtype(self, simple_linear_model):
@@ -26,7 +25,7 @@ class TestTorchErrorHandling:
         backend = BackendRegistry.get_backend("torch")
         backend.model = simple_linear_model
 
-        with pytest.raises((ValueError, KeyError, AttributeError, Exception)):
+        with pytest.raises((ValueError, KeyError, AttributeError)):
             backend.quantize(type="dynamic", dtype="invalid_dtype")
 
     def test_none_model(self):
@@ -34,7 +33,7 @@ class TestTorchErrorHandling:
         backend = BackendRegistry.get_backend("torch")
         backend.model = None
 
-        with pytest.raises((AttributeError, ValueError, TypeError, Exception)):
+        with pytest.raises((AttributeError, ValueError, TypeError)):
             backend.quantize(type="dynamic")
 
     def test_static_without_calibration_data(self, simple_conv_model):
@@ -45,7 +44,7 @@ class TestTorchErrorHandling:
         # This should either fail or handle gracefully
         try:
             backend.quantize(type="static")
-        except (ValueError, TypeError, AttributeError, Exception) as e:
+        except (ValueError, TypeError, AttributeError, RuntimeError):
             # Expected to fail without calibration data
             assert True
         else:
@@ -71,7 +70,7 @@ class TestTorchErrorHandling:
         try:
             backend.quantize(type="dynamic")
             # If it succeeds, that's fine too
-        except Exception:
+        except (RuntimeError, TypeError, AttributeError):
             # Expected for some unsupported architectures
             pass
 
@@ -86,7 +85,7 @@ class TestONNXErrorHandling:
 
         output_path = str(temp_dir / "output.onnx")
 
-        with pytest.raises((FileNotFoundError, Exception)):
+        with pytest.raises((FileNotFoundError, RuntimeError)):
             backend.quantize(type="dynamic", output_path=output_path)
 
     def test_invalid_output_path(self, onnx_model_path):
@@ -97,7 +96,7 @@ class TestONNXErrorHandling:
         # Try to write to a directory that doesn't exist
         invalid_path = "/nonexistent_directory/model.onnx"
 
-        with pytest.raises((FileNotFoundError, OSError, PermissionError, Exception)):
+        with pytest.raises((FileNotFoundError, OSError, PermissionError)):
             backend.quantize(type="dynamic", output_path=invalid_path)
 
     def test_corrupted_onnx_model(self, temp_dir):
@@ -112,7 +111,7 @@ class TestONNXErrorHandling:
 
         output_path = str(temp_dir / "output.onnx")
 
-        with pytest.raises(Exception):
+        with pytest.raises((RuntimeError, ValueError, OSError)):
             backend.quantize(type="dynamic", output_path=output_path)
 
     def test_static_without_calibration_reader(self, onnx_model_path, temp_dir):
@@ -123,7 +122,7 @@ class TestONNXErrorHandling:
         output_path = str(temp_dir / "output.onnx")
 
         # Static quantization requires calibration data
-        with pytest.raises((TypeError, ValueError, AttributeError, Exception)):
+        with pytest.raises((TypeError, ValueError, AttributeError)):
             backend.quantize(type="static", output_path=output_path)
 
 
@@ -132,7 +131,7 @@ class TestBackendRegistryErrorHandling:
 
     def test_invalid_backend_name(self):
         """Test getting backend with invalid name."""
-        with pytest.raises((ValueError, KeyError, Exception)):
+        with pytest.raises((ValueError, KeyError)):
             BackendRegistry.get_backend("invalid_backend")
 
     def test_register_duplicate_backend(self):
@@ -140,12 +139,12 @@ class TestBackendRegistryErrorHandling:
         from deepcrunch.backend.engines.torch_ao import TorchPTQ
 
         # Try to register an existing backend
-        with pytest.raises((ValueError, Exception)):
+        with pytest.raises(ValueError):
             BackendRegistry.register("torch", TorchPTQ)
 
     def test_get_backend_class_invalid(self):
         """Test getting invalid backend class."""
-        with pytest.raises((ValueError, KeyError, Exception)):
+        with pytest.raises((ValueError, KeyError)):
             BackendRegistry.get_backend_class("nonexistent_backend")
 
 
@@ -168,7 +167,7 @@ class TestEdgeCases:
             result = backend.quantize(type="dynamic")
             # If it succeeds, verify it returns something
             assert result is not None
-        except Exception:
+        except (RuntimeError, TypeError):
             # Expected for empty models
             pass
 
@@ -291,7 +290,7 @@ class TestEdgeCases:
             test_input = torch.randn(2, 10)
             output = quantized(test_input)
             assert output is not None
-        except Exception as e:
+        except (RuntimeError, ValueError):
             # Expected if backend requires eval mode
             pass
 

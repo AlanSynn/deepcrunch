@@ -4,6 +4,7 @@ import os
 import tempfile
 from pathlib import Path
 
+import numpy as np
 import pytest
 import torch
 import torch.nn as nn
@@ -159,3 +160,27 @@ def calculate_accuracy_drop(original_output, quantized_output):
     diff = np.abs(original_output - quantized_output)
     relative_diff = diff / (np.abs(original_output) + 1e-8)
     return np.mean(relative_diff) * 100
+
+
+class CalibrationDataReader:
+    """Calibration data reader for ONNX quantization."""
+
+    def __init__(self, num_samples=10, input_shape=(1, 10), input_name="input"):
+        """Initialize calibration data reader.
+        
+        Args:
+            num_samples: Number of calibration samples to generate.
+            input_shape: Shape of input data.
+            input_name: Name of the input tensor.
+        """
+        self.data = [np.random.randn(*input_shape).astype(np.float32) for _ in range(num_samples)]
+        self.input_name = input_name
+        self.index = 0
+
+    def get_next(self):
+        """Get next calibration sample."""
+        if self.index < len(self.data):
+            input_data = {self.input_name: self.data[self.index]}
+            self.index += 1
+            return input_data
+        return None

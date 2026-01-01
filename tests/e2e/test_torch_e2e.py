@@ -1,15 +1,11 @@
 """End-to-end tests for Torch backend quantization."""
 
 import os
-import tempfile
-from pathlib import Path
 
 import pytest
 import torch
-import torch.nn as nn
 
 from deepcrunch.backend.backend_registry import BackendRegistry
-from deepcrunch.backend.engines.torch_ao import TORCH_PTQ, TorchPTQ
 
 
 class TestTorchDynamicQuantization:
@@ -161,9 +157,6 @@ class TestTorchQATQuantization:
         backend = BackendRegistry.get_backend("torch")
         backend.model = simple_conv_model
 
-        # Get original output
-        original_output = simple_conv_model(sample_conv_input)
-
         # Quantize with QAT
         quantized_model = backend.quantize(type="qat")
 
@@ -216,7 +209,7 @@ class TestTorchFXQuantization:
             quantized_output = quantized_model(sample_linear_input)
             assert quantized_output.shape == original_output.shape
 
-        except Exception as e:
+        except (RuntimeError, AttributeError, NotImplementedError) as e:
             # FX mode might not be available in all PyTorch versions
             pytest.skip(f"FX quantization not available: {e}")
 
@@ -236,7 +229,7 @@ class TestTorchFXQuantization:
             output = quantized_model(sample_conv_input)
             assert output is not None
 
-        except Exception as e:
+        except (RuntimeError, AttributeError, NotImplementedError) as e:
             pytest.skip(f"FX quantization not available: {e}")
 
 
@@ -252,7 +245,7 @@ class TestTorchQuantizationComparison:
         try:
             dynamic_quantized = backend_dynamic.quantize(type="dynamic")
             dynamic_output = dynamic_quantized(sample_conv_input)
-        except Exception:
+        except (RuntimeError, TypeError) as e:
             # Dynamic quantization might not work on conv layers
             pytest.skip("Dynamic quantization not supported for conv layers")
 

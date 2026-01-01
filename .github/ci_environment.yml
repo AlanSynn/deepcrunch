@@ -1,14 +1,38 @@
 name: deepcrunch-ci-environment
 channels:
+  - pytorch
   - conda-forge
 dependencies:
   - python=3.10
   - pip=23.1.2
+  
+  # linting and formatting
   - black=23.3.0
   - flake8=6.1.0
   - autopep8=2.0.2
   - isort=5.12.0
   - clang-format=16.0.6
+  - nbstripout
+  
+  # build tools
   - make
   - setuptools=68.0.0
-  - nbstripout
+  
+  # testing dependencies
+  - pytest>=7.0.0
+  - pytest-cov>=4.0.0
+  - pytest-timeout>=2.1.0
+  - pytest-xdist>=3.0.0
+  
+  # runtime dependencies for tests
+  - numpy>=1.21.0
+  - pytorch>=1.12.0
+  - torchvision>=0.13.0
+  - onnx>=1.12.0
+  
+  # additional runtime dependencies
+  - neural-compressor
+  
+  # pip packages
+  - pip:
+    - onnxruntime>=1.12.0

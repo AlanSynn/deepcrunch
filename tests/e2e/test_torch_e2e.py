@@ -245,7 +245,7 @@ class TestTorchQuantizationComparison:
         try:
             dynamic_quantized = backend_dynamic.quantize(type="dynamic")
             dynamic_output = dynamic_quantized(sample_conv_input)
-        except (RuntimeError, TypeError) as e:
+        except (RuntimeError, TypeError):
             # Dynamic quantization might not work on conv layers
             pytest.skip("Dynamic quantization not supported for conv layers")
 

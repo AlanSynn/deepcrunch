@@ -165,7 +165,7 @@ def main():
         ])
 
     print(f"\nQuantization Results:")
-    print(tabulate.tabulate(results_fc,
+    print(tabulate(results_fc,
                    headers=["Method", "Size (MB)", "Reduction", "Latency (ms)", "Speedup", "MAE"],
                    tablefmt="grid"))
 
@@ -209,7 +209,7 @@ def main():
 
     print(f"\nQuantization Results:")
     if results_cnn:
-        print(tabulate.tabulate(results_cnn,
+        print(tabulate(results_cnn,
                        headers=["Method", "Size (MB)", "Reduction", "Latency (ms)", "Speedup", "MAE"],
                        tablefmt="grid"))
     else:
@@ -263,7 +263,7 @@ def main():
         ])
 
     print(f"\nQuantization Results:")
-    print(tabulate.tabulate(results_lstm,
+    print(tabulate(results_lstm,
                    headers=["Method", "Size (MB)", "Reduction", "Latency (ms)", "Speedup", "MAE"],
                    tablefmt="grid"))
 

@@ -126,8 +126,15 @@ install_requires = [
 ]
 
 test_requires = [
-    "pytest",
-    "pytest-cov",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-timeout>=2.1.0",
+    "pytest-xdist>=3.0.0",  # For parallel test execution
+    "numpy>=1.21.0",
+    "onnx>=1.12.0",
+    "onnxruntime>=1.12.0",
+    "torch>=1.12.0",
+    "torchvision>=0.13.0",
 ]
 
 # Workaround for hipify abs paths
